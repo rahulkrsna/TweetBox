@@ -41,18 +41,22 @@ class TweetsViewController: UIViewController, UITableViewDataSource, UITableView
             TwitterClient.sharedInstance.homeTimeline({ (tweets: [Tweet]) -> () in
                 TWEETS = tweets
                 self.tableView.reloadData()
+                self.isMoreDataLoading = false
             }) { (error: NSError) -> () in
-                print("Error: Unable to load the tweets")
+                print("Error: Load Tweets : \(error.localizedDescription)")
+                self.isMoreDataLoading = false
             }
         } else { //Infinite scroll
             TwitterClient.sharedInstance.homeTimelineSinceId(sinceID, success: { (tweets: [Tweet]) -> () in
                 TWEETS?.appendContentsOf(tweets)
                 self.tableView.reloadData()
+                self.isMoreDataLoading = false
             }, failure: { (error: NSError) -> () in
-                print("Error: Unable to load the tweets")
+                print("Error: Load Tweets : \(error.localizedDescription)")
+                self.isMoreDataLoading = false
             })
         }
-        isMoreDataLoading = false
+        
     }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {

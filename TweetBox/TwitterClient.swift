@@ -81,9 +81,8 @@ class TwitterClient: BDBOAuth1SessionManager {
     func homeTimelineSinceId(sinceId: Int, success: ([Tweet]) -> (), failure: (NSError) -> ()) {
         
         let params:[String: AnyObject] = ["since_id": sinceId]
-        print(params)
         
-        //GET the timeline of tweets
+        //GET the timeline of tweets since an ID
         TwitterClient.sharedInstance.GET("1.1/statuses/home_timeline.json", parameters: params, progress: { (progress: NSProgress) -> Void in
             }, success: { (operation: NSURLSessionDataTask, response: AnyObject?) -> Void in
                 let tweets = Tweet.tweetsWithArray(response as! [NSDictionary])
