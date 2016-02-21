@@ -9,7 +9,7 @@
 import UIKit
 var TWEETS: [Tweet]?
 
-class TweetsViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
+class TweetsViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UIScrollViewDelegate {
     
     @IBOutlet var tableView: UITableView!
     override func viewDidLoad() {
@@ -22,13 +22,7 @@ class TweetsViewController: UIViewController, UITableViewDataSource, UITableView
         
         navigationController?.navigationBar.barTintColor = UIColor(red: 0, green: 255, blue: 255, alpha: 0) //UIColor.cyanColor()
         
-        // Do any additional setup after loading the view.
-        TwitterClient.sharedInstance.homeTimeline({ (tweets: [Tweet]) -> () in
-            TWEETS = tweets
-            self.tableView.reloadData()
-        }) { (error: NSError) -> () in
-                print("Error: Unable to load the tweets")
-        }
+        getHomeTimelineTweets(0)
     }
 
     override func didReceiveMemoryWarning() {
@@ -39,6 +33,26 @@ class TweetsViewController: UIViewController, UITableViewDataSource, UITableView
     @IBAction func onLogoout(sender: AnyObject) {
         
         TwitterClient.sharedInstance.logout()
+    }
+    
+    func getHomeTimelineTweets(sinceID: Int) {
+        //Get the latest tweets on timeline
+        if sinceID == 0 {
+            TwitterClient.sharedInstance.homeTimeline({ (tweets: [Tweet]) -> () in
+                TWEETS = tweets
+                self.tableView.reloadData()
+            }) { (error: NSError) -> () in
+                print("Error: Unable to load the tweets")
+            }
+        } else { //Infinite scroll
+            TwitterClient.sharedInstance.homeTimelineSinceId(sinceID, success: { (tweets: [Tweet]) -> () in
+                TWEETS?.appendContentsOf(tweets)
+                self.tableView.reloadData()
+            }, failure: { (error: NSError) -> () in
+                print("Error: Unable to load the tweets")
+            })
+        }
+        isMoreDataLoading = false
     }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -60,7 +74,28 @@ class TweetsViewController: UIViewController, UITableViewDataSource, UITableView
         
         return Cell
     }
-
+    
+    var isMoreDataLoading = false
+    func scrollViewDidScroll(scrollView: UIScrollView) {
+      
+        if(!isMoreDataLoading) {
+            
+            // Calculate the position of one screen length before the bottom of the results
+            let scrollViewContentHeight = tableView.contentSize.height
+            let scrollOffsetThreshold = scrollViewContentHeight - (3 * tableView.bounds.size.height)
+            
+            if(scrollView.contentOffset.y > scrollOffsetThreshold && tableView.dragging) {
+                isMoreDataLoading = true
+                
+                if let tweets = TWEETS {
+                    getHomeTimelineTweets(Int((tweets.last?.tweetId!)!)!)
+                } else {
+                    getHomeTimelineTweets(0)
+                }
+            }
+        }
+    }
+    
     /*
     // MARK: - Navigation
 

@@ -77,6 +77,22 @@ class TwitterClient: BDBOAuth1SessionManager {
             })
     }
     
+    // Get the Tweets for the current user from the home timeline
+    func homeTimelineSinceId(sinceId: Int, success: ([Tweet]) -> (), failure: (NSError) -> ()) {
+        
+        let params:[String: AnyObject] = ["since_id": sinceId]
+        print(params)
+        
+        //GET the timeline of tweets
+        TwitterClient.sharedInstance.GET("1.1/statuses/home_timeline.json", parameters: params, progress: { (progress: NSProgress) -> Void in
+            }, success: { (operation: NSURLSessionDataTask, response: AnyObject?) -> Void in
+                let tweets = Tweet.tweetsWithArray(response as! [NSDictionary])
+                success(tweets)
+            }, failure: { (operation: NSURLSessionDataTask?, error: NSError) -> Void in
+                failure(error)
+        })
+    }
+    
     func handleOpenURL(url: NSURL) {
         
         let requestToken = BDBOAuth1Credential(queryString: url.query)
