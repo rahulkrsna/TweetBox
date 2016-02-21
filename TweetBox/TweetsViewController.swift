@@ -12,6 +12,8 @@ var TWEETS: [Tweet]?
 class TweetsViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UIScrollViewDelegate {
     
     @IBOutlet var tableView: UITableView!
+    let refreshControl = UIRefreshControl()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -20,7 +22,11 @@ class TweetsViewController: UIViewController, UITableViewDataSource, UITableView
         self.tableView.estimatedRowHeight = 150
         self.tableView.rowHeight = UITableViewAutomaticDimension
         
-        navigationController?.navigationBar.barTintColor = UIColor(red: 0, green: 255, blue: 255, alpha: 0) //UIColor.cyanColor()
+        navigationController?.navigationBar.barTintColor = UIColor(red: 0, green: 255, blue: 255, alpha: 0.3)
+        
+        //Refresh Control
+        refreshControl.addTarget(self, action: "refreshControlAction:", forControlEvents: UIControlEvents.ValueChanged)
+        tableView.insertSubview(refreshControl, atIndex: 0)
         
         getHomeTimelineTweets(0)
     }
@@ -35,16 +41,23 @@ class TweetsViewController: UIViewController, UITableViewDataSource, UITableView
         TwitterClient.sharedInstance.logout()
     }
     
+    func refreshControlAction(refreshControl: UIRefreshControl) {
+        
+        getHomeTimelineTweets(0)
+    }
+    
     func getHomeTimelineTweets(sinceID: Int) {
         //Get the latest tweets on timeline
         if sinceID == 0 {
             TwitterClient.sharedInstance.homeTimeline({ (tweets: [Tweet]) -> () in
                 TWEETS = tweets
                 self.tableView.reloadData()
-                self.isMoreDataLoading = false
+                self.isMoreDataLoading = false // Infinite Scrolling
+                self.refreshControl.endRefreshing() // Scroll to refresh
             }) { (error: NSError) -> () in
                 print("Error: Load Tweets : \(error.localizedDescription)")
-                self.isMoreDataLoading = false
+                self.isMoreDataLoading = false // Infinite Scrolling
+                self.refreshControl.endRefreshing() // Scroll to refresh
             }
         } else { //Infinite scroll
             TwitterClient.sharedInstance.homeTimelineSinceId(sinceID, success: { (tweets: [Tweet]) -> () in
