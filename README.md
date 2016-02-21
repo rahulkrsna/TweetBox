@@ -2,7 +2,7 @@
 
 **TweetBox** is a basic twitter app to read and compose tweets the [Twitter API](https://apps.twitter.com/).
 
-Time spent: **X** hours spent in total
+Time spent: **20** hours spent in total
 
 ## User Stories
 
@@ -27,7 +27,7 @@ The following **additional** features are implemented:
 
 Please list two areas of the assignment you'd like to **discuss further with your peers** during the next class (examples include better ways to implement something, how to extend your app in certain ways, etc):
 
-1. I would like to discuss how did everyone handle the particular tweet for which retweet or favourite option is selected
+1. I would like to discuss how did everyone handle the particular tweet for which retweet or favourite option is selected.
 2. I would also like to discuss if anyone has made any network related optimizations.
 
 
@@ -42,12 +42,14 @@ GIF created with [LiceCap](http://www.cockos.com/licecap/).
 ## Notes
 
 Describe any challenges encountered while building the app.
+
 1. Working on Retweet and Favourite options, I took some time figuring out on how to achieve this. How to get the image updates done and how to maintain the status of current user selection and the count.
 2. Autolayout is another area where I had to spend considerable amount of time. I feel I am getting the feel of how to do it. The more I do it..
 
+
 ## License
 
-    Copyright [yyyy] [name of copyright owner]
+    Copyright [2016] [Rahul Krishna Vasantham]
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
