@@ -22,7 +22,15 @@ class TweetsViewController: UIViewController, UITableViewDataSource, UITableView
         self.tableView.estimatedRowHeight = 150
         self.tableView.rowHeight = UITableViewAutomaticDimension
         
+        // Set the navigationBar background colour
         navigationController?.navigationBar.barTintColor = UIColor(red: 0, green: 255, blue: 255, alpha: 0.3)
+
+        //Set the navigationBar titleView
+        let homeButton = UIButton(type: UIButtonType.Custom) as UIButton
+        homeButton.setTitle("Home", forState: UIControlState.Normal)
+        homeButton.titleLabel?.textColor = UIColor.whiteColor()
+        homeButton.addTarget(self, action: "goHome:", forControlEvents: UIControlEvents.TouchUpInside)
+        self.navigationItem.titleView = homeButton
         
         //Refresh Control
         refreshControl.addTarget(self, action: "refreshControlAction:", forControlEvents: UIControlEvents.ValueChanged)
@@ -44,6 +52,12 @@ class TweetsViewController: UIViewController, UITableViewDataSource, UITableView
     func refreshControlAction(refreshControl: UIRefreshControl) {
         
         getHomeTimelineTweets(0)
+    }
+    
+    func goHome(sender: AnyObject) {
+        
+        let indexPath = NSIndexPath(forRow: 0, inSection: 0)
+        self.tableView.scrollToRowAtIndexPath(indexPath, atScrollPosition: UITableViewScrollPosition.Top, animated: true)
     }
     
     func getHomeTimelineTweets(sinceID: Int) {

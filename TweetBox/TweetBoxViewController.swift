@@ -28,9 +28,9 @@ class TweetBoxViewController: UIViewController {
         client.loginWithCompletion({ () -> () in
             print("I have logged in :-D")
             self.performSegueWithIdentifier("loginSegue", sender: self)
-            }) { (error: NSError) -> () in
-                print("Error: \(error.localizedDescription)")
-                self.showAnAlert("Login Failed", message: "\(error.localizedDescription)")
+        }) { (error: NSError) -> () in
+            print("Error: \(error.localizedDescription)")
+            self.showAnAlert("Login Failed", message: "\(error.localizedDescription)")
         }
     }
     

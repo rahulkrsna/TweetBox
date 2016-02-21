@@ -15,6 +15,8 @@ class User: NSObject {
     var tagline: String?
     var dictionary: NSDictionary?
     var favouritesCount:Int = 0
+    var followersCount:Int = 0
+    var followingCount:Int = 0
     
     init(dictionary: NSDictionary) {
         name = dictionary["name"] as? String
@@ -24,8 +26,10 @@ class User: NSObject {
         if let profileURL = profileURL {
             profileImgURL = NSURL(string: profileURL)
         }
-        tagline = dictionary["description"] as? String
+        self.tagline = dictionary["description"] as? String
         self.favouritesCount = (dictionary["favourites_count"] as? Int) ?? 0
+        self.followersCount = (dictionary["followers_count"] as? Int) ?? 0
+        self.followingCount = (dictionary["friends_count"] as? Int) ?? 0
         
         self.dictionary = dictionary
     }

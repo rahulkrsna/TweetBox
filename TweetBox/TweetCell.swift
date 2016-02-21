@@ -55,8 +55,8 @@ class TweetCell: UITableViewCell {
                 if let url = user.profileImgURL {
                     self.thumbImgView.setImageWithURL(url)
                 }
-                self.usernameLabel.text = user.screenName!
-                self.userHandleLabel.text = "@\(user.name!)"
+                self.usernameLabel.text = user.name!
+                self.userHandleLabel.text = "@\(user.screenName!)"
                 self.favouritesLabel.text = "\(user.favouritesCount)"
             }
             

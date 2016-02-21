@@ -53,14 +53,12 @@ class TwitterClient: BDBOAuth1SessionManager {
             
         //GET Current User
         TwitterClient.sharedInstance.GET("1.1/account/verify_credentials.json", parameters: nil, progress: { (progress: NSProgress) -> Void in
-            print("In Progress")
-            }, success: { (operation: NSURLSessionDataTask, response: AnyObject?) -> Void in
-                let user = User(dictionary: response as! NSDictionary)
-                print("User: \(user.name)")
-                success(user)
-            }, failure: { (operation: NSURLSessionDataTask?, error: NSError) -> Void in
-                print("error in getting the current user")
-                failure(error)
+        }, success: { (operation: NSURLSessionDataTask, response: AnyObject?) -> Void in
+            let user = User(dictionary: response as! NSDictionary)
+            success(user)
+        }, failure: { (operation: NSURLSessionDataTask?, error: NSError) -> Void in
+            print("error in getting the current user")
+            failure(error)
         })
     }
     
@@ -104,10 +102,9 @@ class TwitterClient: BDBOAuth1SessionManager {
                 User.currentUser = user
                 self.loginSuccess!()
             }, failure: { (error: NSError) -> () in
-                    self.loginFailure!(error)
+                self.loginFailure!(error)
             })
-            self.loginSuccess!()
-            //            client.currentAccount()
+                self.loginSuccess!()
             }) { (error: NSError!) -> Void in
                 print("Unable to get the access Token: \(error.description)")
                 self.loginFailure!(error)
