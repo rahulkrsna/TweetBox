@@ -25,13 +25,11 @@ class TwitterClient: BDBOAuth1SessionManager {
         loginSuccess = success
         loginFailure = failure
         
-        // Fetch Request token and redirect to authorization page.
         // Remove the access token
         TwitterClient.sharedInstance.requestSerializer.removeAccessToken()
         
         // Get the Access token
         TwitterClient.sharedInstance.fetchRequestTokenWithPath("oauth/request_token", method: "GET", callbackURL: NSURL(string: "twitterdemo://oauth"), scope: nil, success: { (requestToken: BDBOAuth1Credential!) -> Void in
-                print("Got the Request Token")
                 
                 let authURL = NSURL(string:"https://api.twitter.com/oauth/authorize?oauth_token=\(requestToken.token)")
                 UIApplication.sharedApplication().openURL(authURL!)
@@ -94,7 +92,6 @@ class TwitterClient: BDBOAuth1SessionManager {
         
         let requestToken = BDBOAuth1Credential(queryString: url.query)
         fetchAccessTokenWithPath("oauth/access_token", method: "POST", requestToken: requestToken, success: { (accessToken: BDBOAuth1Credential!) -> Void in
-            print("I got an access Token!")
             //Saving the access Token.
             self.requestSerializer.saveAccessToken(accessToken)
             
@@ -161,4 +158,24 @@ class TwitterClient: BDBOAuth1SessionManager {
         }
     }
     
+    func replyToTweet(text: String, replytoUser: String, success:() -> (), failure: () -> ()) {
+        
+        var params = [String: AnyObject]()
+        params["status"] = text
+        
+        if replytoUser.characters.count > 0 {
+            params["in_reply_to_status_id"] = replytoUser
+        }
+        
+        print(params)
+        
+        //POST Reply To Tweet
+        TwitterClient.sharedInstance.POST("1.1/statuses/update.json", parameters: params, progress: { (progress: NSProgress) -> Void in
+            }, success: { (task: NSURLSessionDataTask, response: AnyObject?) -> Void in
+                success()
+            }) { (task: NSURLSessionDataTask?, error:NSError) -> Void in
+                print("error: \(error.localizedDescription)")
+                failure()
+        }
+    }
 }

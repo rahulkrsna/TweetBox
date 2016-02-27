@@ -23,7 +23,7 @@ class TweetsViewController: UIViewController, UITableViewDataSource, UITableView
         self.tableView.rowHeight = UITableViewAutomaticDimension
         
         // Set the navigationBar background colour
-        navigationController?.navigationBar.barTintColor = UIColor(red: 0, green: 255, blue: 255, alpha: 0.3)
+        navigationController?.navigationBar.barTintColor = UIColor(red: 64.0/255.0, green: 153.0/255.0, blue: 1.0, alpha: 1.0)
 
         //Set the navigationBar titleView
         let homeButton = UIButton(type: UIButtonType.Custom) as UIButton
@@ -100,8 +100,10 @@ class TweetsViewController: UIViewController, UITableViewDataSource, UITableView
         let Cell = tableView.dequeueReusableCellWithIdentifier("TweetCell", forIndexPath: indexPath) as! TweetCell
         
         Cell.tweet = TWEETS![indexPath.row]
-        Cell.onRetweet.tag = indexPath.row
+        Cell.retweetButton.tag = indexPath.row
         Cell.favoriteButton.tag = indexPath.row
+        Cell.forwardTweetButton.tag = indexPath.row
+        Cell.tag = indexPath.row
         
         return Cell
     }
@@ -125,6 +127,24 @@ class TweetsViewController: UIViewController, UITableViewDataSource, UITableView
                 }
             }
         }
+    }
+    
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        
+        if (segue.identifier == "TweetDetailsSegue") {
+            let cell =  sender as! UITableViewCell
+            let tweetDetailsViewController = segue.destinationViewController as! TweetDetailsViewController
+            tweetDetailsViewController.tweet = TWEETS![cell.tag]
+            tweetDetailsViewController.tweetIndex = cell.tag
+        } else if (segue.identifier == "ReplyToTweetSegue") {
+            let replyButton = sender as! UIButton
+            let replyToTweetViewController = segue.destinationViewController as! ReplyToTweetViewController
+            replyToTweetViewController.tweetIndex = replyButton.tag
+            replyToTweetViewController.tweet = TWEETS![replyButton.tag]
+        }
+    }
+    override func viewDidAppear(animated: Bool) {
+        self.tableView.reloadData()
     }
     
     /*

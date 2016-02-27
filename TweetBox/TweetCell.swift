@@ -21,22 +21,9 @@ class TweetCell: UITableViewCell {
     @IBOutlet var createdAtLabel: UILabel!
     @IBOutlet var tweetTextLabel: UILabel!
     @IBOutlet var forwardTweetButton: UIButton!
-    @IBOutlet var onRetweet: UIButton!
+    @IBOutlet var retweetButton: UIButton!
     @IBOutlet var retweetsLabel: UILabel!
     @IBOutlet var favouritesLabel: UILabel!
-    
-    
-//    extension String {
-//        init(htmlEncodedString: String) {
-//            let encodedData = htmlEncodedString.dataUsingEncoding(NSUTF8StringEncoding)!
-//            let attributedOptions : [String: AnyObject] = [
-//                NSDocumentTypeDocumentAttribute: NSHTMLTextDocumentType,
-//                NSCharacterEncodingDocumentAttribute: NSUTF8StringEncoding
-//            ]
-//            let attributedString = NSAttributedString(data: encodedData, options: attributedOptions, documentAttributes: nil, error: nil)!
-//            self.init(attributedString.string)
-//        }
-//    }
     
     var tweet: Tweet! {
         didSet {
@@ -110,9 +97,6 @@ class TweetCell: UITableViewCell {
         }
     }
     
-    @IBAction func onForward(sender: AnyObject) {
-    }
-    
     @IBAction func onRetweet(sender: AnyObject) {
         
         let retweetBtn = sender as! UIButton
@@ -146,17 +130,17 @@ class TweetCell: UITableViewCell {
     func setFavouritedTo(status:Bool) {
         
         if status {
-            self.favoriteButton.imageView?.image = UIImage(named: "favorite-on-16")
+            self.favoriteButton.setBackgroundImage(UIImage(named: "favourite-on-16"), forState: UIControlState.Normal)
         } else {
-            self.favoriteButton.imageView?.image = UIImage(named: "favorite-off-16")
+            self.favoriteButton.setBackgroundImage(UIImage(named: "favourite-off-16"), forState: UIControlState.Normal)
         }
     }
     
     func setRetweetedTo(status:Bool) {
         if(status) {
-            self.onRetweet.imageView?.image = UIImage(named: "retweet-on-16")
+            self.retweetButton.setBackgroundImage(UIImage(named:"retweet-on-16"), forState: UIControlState.Normal)
         } else {
-            self.onRetweet.imageView?.image = UIImage(named: "retweet-off-16")
+            self.retweetButton.setBackgroundImage(UIImage(named:"retweet-off-16"), forState: UIControlState.Normal)
         }
     }
     

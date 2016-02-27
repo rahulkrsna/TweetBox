@@ -22,7 +22,7 @@ class UserViewController: UIViewController {
         super.viewDidLoad()
         
         // Set the navigationBar background colour
-        navigationController?.navigationBar.barTintColor = UIColor(red: 0, green: 255, blue: 255, alpha: 0.3)
+        navigationController?.navigationBar.barTintColor = UIColor(red: 64.0/255.0, green: 153.0/255.0, blue: 1.0, alpha: 1.0)
         navigationController?.navigationBar.tintColor = UIColor.whiteColor()
 
         navigationController?.navigationBar.titleTextAttributes = [ NSForegroundColorAttributeName :UIColor.whiteColor() ]
