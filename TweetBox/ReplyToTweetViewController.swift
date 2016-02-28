@@ -17,7 +17,7 @@ class ReplyToTweetViewController: UIViewController, UITextViewDelegate {
     @IBOutlet var userHandleLabel: UILabel!
     @IBOutlet var tweetTextView: UITextView!
     @IBOutlet var tweetSizeLabel: UILabel!
-    var tweet: Tweet!
+    var tweetInfo: ReplyTweetUserInfo!
     var tweetIndex: Int!
     
     override func viewDidLoad() {
@@ -40,12 +40,11 @@ class ReplyToTweetViewController: UIViewController, UITextViewDelegate {
     @IBAction func onTweet(sender: AnyObject) {
         let alertController = UIAlertController(title: "Tweet", message: "Successful", preferredStyle: UIAlertControllerStyle.Alert)
         let OKAction = UIAlertAction(title: "OK", style: UIAlertActionStyle.Cancel) { (action: UIAlertAction) -> Void in
-//            self.performSegueWithIdentifier("TweetsViewSegue", sender: nil)
         }
         alertController.addAction(OKAction)
         
         if self.tweetTextView.text.characters.count > 0 {
-            TwitterClient.sharedInstance.replyToTweet(self.tweetTextView.text, replytoUser: (self.tweet.user?.screenName!)!, success: { () -> () in
+            TwitterClient.sharedInstance.replyToTweet(self.tweetTextView.text, replytoUser: (self.tweetInfo.userHandle!), success: { () -> () in
                 print("Reply to Tweet Successful")
                 
                 self.presentViewController(alertController, animated: true, completion: { () -> Void in
@@ -63,19 +62,20 @@ class ReplyToTweetViewController: UIViewController, UITextViewDelegate {
     
     func fillTweetInformation() {
         
-        if let tweet = self.tweet {
-            if let user = tweet.user {
-                if let url = user.profileImgURL {
-                    self.userImageView.setImageWithURL(url)
-                }
-                self.userNameLabel.text = user.name!
-                self.userHandleLabel.text = "@\(user.screenName!)"
+        if let tweetInfo = self.tweetInfo {
+            if let url = tweetInfo.userProfileURL {
+                self.userImageView.setImageWithURL(url)
             }
+            self.userNameLabel.text = tweetInfo.userName!
+            self.userHandleLabel.text = "@\(tweetInfo.userHandle!)"
         }
         
-        if (self.userHandleLabel.text?.characters.count)! <= 140 {
+        if  (self.tweetInfo.userHandle!.characters.count) <= MAX_TWEET_SIZE  && self.tweetInfo.userHandle!.characters.count > 0 {
             self.tweetTextView.text = self.userHandleLabel.text
             self.tweetSizeLabel.text = "\(MAX_TWEET_SIZE - (self.userHandleLabel.text?.characters.count)!)"
+        } else {
+            self.tweetTextView.text = ""
+            self.tweetSizeLabel.text = "\(MAX_TWEET_SIZE)"
         }
     }
     
@@ -84,7 +84,7 @@ class ReplyToTweetViewController: UIViewController, UITextViewDelegate {
         var lengthOfTweet = MAX_TWEET_SIZE - textView.text.characters.count
         
         if (lengthOfTweet <= 0) {
-            self.tweetTextView.text = self.tweetTextView.text[self.tweetTextView.text.startIndex ... self.tweetTextView.text.startIndex.advancedBy(139)]
+            self.tweetTextView.text = self.tweetTextView.text[self.tweetTextView.text.startIndex ... self.tweetTextView.text.startIndex.advancedBy(MAX_TWEET_SIZE-1)]
             lengthOfTweet = 0
         }
         self.tweetSizeLabel.text = "\(lengthOfTweet)"

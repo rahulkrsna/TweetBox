@@ -26,10 +26,21 @@ class TweetsViewController: UIViewController, UITableViewDataSource, UITableView
         navigationController?.navigationBar.barTintColor = UIColor(red: 64.0/255.0, green: 153.0/255.0, blue: 1.0, alpha: 1.0)
 
         //Set the navigationBar titleView
+//        let uiView = UIView(frame: CGRect.zero)
+        
+//        let view = UIImageView(image: UIImage(named: "twitter-24"))
+//        view.autoresizingMask = UIViewAutoresizing.FlexibleHeight
+//        view.contentMode = UIViewContentMode.ScaleAspectFit
+//        let homeButton = UIButton(frame: CGRect.zero)
         let homeButton = UIButton(type: UIButtonType.Custom) as UIButton
-        homeButton.setTitle("Home", forState: UIControlState.Normal)
-        homeButton.titleLabel?.textColor = UIColor.whiteColor()
+        homeButton.frame = CGRectMake(0, 0, 24, 24)
+        homeButton.setImage(UIImage(named: "twitter-24"), forState: UIControlState.Normal)
+        homeButton.imageView?.sizeToFit()
+//        homeButton.setTitle("Home", forState: UIControlState.Normal)
+//        homeButton.titleLabel?.textColor = UIColor.whiteColor()
         homeButton.addTarget(self, action: "goHome:", forControlEvents: UIControlEvents.TouchUpInside)
+//        uiView.addSubview(homeButton)
+        
         self.navigationItem.titleView = homeButton
         
         //Refresh Control
@@ -140,7 +151,14 @@ class TweetsViewController: UIViewController, UITableViewDataSource, UITableView
             let replyButton = sender as! UIButton
             let replyToTweetViewController = segue.destinationViewController as! ReplyToTweetViewController
             replyToTweetViewController.tweetIndex = replyButton.tag
-            replyToTweetViewController.tweet = TWEETS![replyButton.tag]
+            
+            let tweet = TWEETS![replyButton.tag]
+            let tweetInfo = ReplyTweetUserInfo()
+            tweetInfo.userName = tweet.user?.name!
+            tweetInfo.userHandle = tweet.user?.screenName!
+            tweetInfo.userProfileURL = tweet.user?.profileImgURL!
+            
+            replyToTweetViewController.tweetInfo = tweetInfo
         }
     }
     override func viewDidAppear(animated: Bool) {

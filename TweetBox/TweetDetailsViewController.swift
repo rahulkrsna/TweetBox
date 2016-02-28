@@ -157,7 +157,13 @@ class TweetDetailsViewController: UIViewController {
         
         let replyToTweetViewController = segue.destinationViewController as! ReplyToTweetViewController
         replyToTweetViewController.tweetIndex = self.tweetIndex
-        replyToTweetViewController.tweet = TWEETS![self.tweetIndex]
+        let tweet = TWEETS![self.tweetIndex]
+        let tweetInfo = ReplyTweetUserInfo()
+        tweetInfo.userName = tweet.user?.name!
+        tweetInfo.userHandle = tweet.user?.screenName!
+        tweetInfo.userProfileURL = tweet.user?.profileImgURL!
+        
+        replyToTweetViewController.tweetInfo = tweetInfo
     }
 
 }
