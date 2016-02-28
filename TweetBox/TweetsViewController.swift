@@ -12,6 +12,7 @@ var TWEETS: [Tweet]?
 class TweetsViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UIScrollViewDelegate,TweetCellDelegate {
     
     var user: User?
+    var userHandle: String!
     
     @IBOutlet var tableView: UITableView!
     let refreshControl = UIRefreshControl()
@@ -165,7 +166,14 @@ class TweetsViewController: UIViewController, UITableViewDataSource, UITableView
             
             replyToTweetViewController.tweetInfo = tweetInfo
         } else if (segue.identifier == "UserProfileSegue") {
-            
+            // In case it is the current update the information.
+            if(self.user?.screenName! == userHandle) {
+                TwitterClient.sharedInstance.currentAccount({ (user: User) -> () in
+                    User.currentUser = user
+                }, failure: { (error: NSError) -> () in
+                    print("User Information not found")
+                })
+            }
             let userViewController = segue.destinationViewController as! UserViewController
             userViewController.user = self.user
         }
@@ -174,6 +182,7 @@ class TweetsViewController: UIViewController, UITableViewDataSource, UITableView
     override func viewDidAppear(animated: Bool) {
         self.tableView.reloadData()
         user = User.currentUser!
+        userHandle = user?.screenName!
     }
     
     func tweetCellProfileImageTap(sender: AnyObject?) {
