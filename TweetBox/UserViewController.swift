@@ -18,6 +18,26 @@ class UserViewController: UIViewController { //, UITableViewDelegate, UITableVie
     @IBOutlet var followersCountLabel: UILabel!
     @IBOutlet var userHandleLabel: UILabel!
     @IBOutlet var tableView: UITableView!
+    @IBOutlet var tweetsCountLabel: UILabel!
+    
+    var user: User!
+//        {
+//        didSet {
+//            print(user.screenName!)
+//            if let name = user.screenName {
+//                self.userHandleLabel.text = "@\(name)"
+//            }
+//            if let name = user.name {
+//                self.userNameLabel.text = name
+//            }
+//            self.followersCountLabel.text = "\(user.followersCount)"
+//            self.followingCountLabel.text = "\(user.followingCount)"
+//            self.tweetsCountLabel.text = "\(user.tweetsCount)"
+//            if let url = user.profileImgURL {
+//                self.userImageView.setImageWithURL(url)
+//            }
+//        }
+//    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -33,6 +53,7 @@ class UserViewController: UIViewController { //, UITableViewDelegate, UITableVie
 //        self.tableView.estimatedRowHeight = 150
 //        self.tableView.rowHeight = UITableViewAutomaticDimension
         
+//        Circular Image
 //        userImageView.layer.cornerRadius = userImageView.bounds.width/2
 //        userImageView.layer.masksToBounds = true
 //        userImageView.layer.borderWidth = 2
@@ -51,9 +72,7 @@ class UserViewController: UIViewController { //, UITableViewDelegate, UITableVie
     }
     
     func fillUserDetails() {
-        
-        let user = User.currentUser!
-    
+
 //        if let name = user.screenName {
 //            self.titleItem.title = "@\(name)"
 //        }
@@ -61,14 +80,12 @@ class UserViewController: UIViewController { //, UITableViewDelegate, UITableVie
         if let name = user.screenName {
             self.userHandleLabel.text = "@\(name)"
         }
-        
         if let name = user.name {
             self.userNameLabel.text = name
         }
-        
         self.followersCountLabel.text = "\(user.followersCount)"
         self.followingCountLabel.text = "\(user.followingCount)"
-        
+        self.tweetsCountLabel.text = "\(user.tweetsCount)"
         if let url = user.profileImgURL {
             self.userImageView.setImageWithURL(url)
         }
@@ -98,7 +115,6 @@ class UserViewController: UIViewController { //, UITableViewDelegate, UITableVie
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         
-        print("Here..")
         if (segue.identifier == "NewTweetSegue") {
             
             let replyToTweetViewController = segue.destinationViewController as! ReplyToTweetViewController
@@ -107,6 +123,7 @@ class UserViewController: UIViewController { //, UITableViewDelegate, UITableVie
             tweetInfo.userName = user.name
             tweetInfo.userHandle = user.screenName
             tweetInfo.userProfileURL = user.profileImgURL
+            tweetInfo.newTweet = true
             replyToTweetViewController.tweetInfo = tweetInfo
         }
     }

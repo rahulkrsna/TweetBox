@@ -9,11 +9,15 @@
 import UIKit
 var TWEETS: [Tweet]?
 
-class TweetsViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UIScrollViewDelegate {
+class TweetsViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UIScrollViewDelegate,TweetCellDelegate {
+    
+    var user: User?
     
     @IBOutlet var tableView: UITableView!
     let refreshControl = UIRefreshControl()
     
+    @IBOutlet var imgView: UIImageView!
+    @IBOutlet var genView: UIView!
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -46,7 +50,7 @@ class TweetsViewController: UIViewController, UITableViewDataSource, UITableView
         //Refresh Control
         refreshControl.addTarget(self, action: "refreshControlAction:", forControlEvents: UIControlEvents.ValueChanged)
         tableView.insertSubview(refreshControl, atIndex: 0)
-        
+
         getHomeTimelineTweets(0)
     }
 
@@ -115,6 +119,7 @@ class TweetsViewController: UIViewController, UITableViewDataSource, UITableView
         Cell.favoriteButton.tag = indexPath.row
         Cell.forwardTweetButton.tag = indexPath.row
         Cell.tag = indexPath.row
+        Cell.delegate = self
         
         return Cell
     }
@@ -159,12 +164,27 @@ class TweetsViewController: UIViewController, UITableViewDataSource, UITableView
             tweetInfo.userProfileURL = tweet.user?.profileImgURL!
             
             replyToTweetViewController.tweetInfo = tweetInfo
+        } else if (segue.identifier == "UserProfileSegue") {
+            
+            let userViewController = segue.destinationViewController as! UserViewController
+            userViewController.user = self.user
         }
     }
+    
     override func viewDidAppear(animated: Bool) {
         self.tableView.reloadData()
+        user = User.currentUser!
     }
     
+    func tweetCellProfileImageTap(sender: AnyObject?) {
+        
+        let recog = sender as! UITapGestureRecognizer
+        let view = recog.view
+        let cell = view!.superview?.superview as! TweetCell
+        let indexPath = tableView.indexPathForCell(cell)
+        self.user = TWEETS![indexPath!.row].user
+        performSegueWithIdentifier("UserProfileSegue", sender: nil)
+    }
     /*
     // MARK: - Navigation
 

@@ -17,6 +17,8 @@ class ReplyToTweetViewController: UIViewController, UITextViewDelegate {
     @IBOutlet var userHandleLabel: UILabel!
     @IBOutlet var tweetTextView: UITextView!
     @IBOutlet var tweetSizeLabel: UILabel!
+    @IBOutlet var tweetsViewBtn: UIButton!
+    
     var tweetInfo: ReplyTweetUserInfo!
     var tweetIndex: Int!
     
@@ -28,6 +30,7 @@ class ReplyToTweetViewController: UIViewController, UITextViewDelegate {
         navigationController?.navigationBar.tintColor = UIColor.whiteColor()
         
         self.tweetTextView.delegate = self
+        self.tweetsViewBtn.hidden = true
         
         fillTweetInformation()
     }
@@ -40,21 +43,24 @@ class ReplyToTweetViewController: UIViewController, UITextViewDelegate {
     @IBAction func onTweet(sender: AnyObject) {
         let alertController = UIAlertController(title: "Tweet", message: "Successful", preferredStyle: UIAlertControllerStyle.Alert)
         let OKAction = UIAlertAction(title: "OK", style: UIAlertActionStyle.Cancel) { (action: UIAlertAction) -> Void in
+            self.performSegueWithIdentifier("tweetToTweetsViewSegue", sender: nil)
         }
         alertController.addAction(OKAction)
         
+        // Reply to User only in case of reply tweet
+        var replyToUser = ""
+        if(!tweetInfo.newTweet) {
+            replyToUser = self.tweetInfo.userHandle!
+        }
+        
         if self.tweetTextView.text.characters.count > 0 {
-            TwitterClient.sharedInstance.replyToTweet(self.tweetTextView.text, replytoUser: (self.tweetInfo.userHandle!), success: { () -> () in
-                print("Reply to Tweet Successful")
-                
+            TwitterClient.sharedInstance.replyToTweet(self.tweetTextView.text, replytoUser: replyToUser, success: { () -> () in
                 self.presentViewController(alertController, animated: true, completion: { () -> Void in
-                    print("Show Alert")
+                    //Tweet Successful
                 })
             }, failure: { () -> () in
-                print("Reply failed")
-                
+                print("Tweet Failed")
                 self.presentViewController(alertController, animated: true, completion: { () -> Void in
-                    print("Show Alert")
                 })
             })
         }
@@ -69,13 +75,14 @@ class ReplyToTweetViewController: UIViewController, UITextViewDelegate {
             self.userNameLabel.text = tweetInfo.userName!
             self.userHandleLabel.text = "@\(tweetInfo.userHandle!)"
         }
-        
-        if  (self.tweetInfo.userHandle!.characters.count) <= MAX_TWEET_SIZE  && self.tweetInfo.userHandle!.characters.count > 0 {
-            self.tweetTextView.text = self.userHandleLabel.text
-            self.tweetSizeLabel.text = "\(MAX_TWEET_SIZE - (self.userHandleLabel.text?.characters.count)!)"
-        } else {
-            self.tweetTextView.text = ""
-            self.tweetSizeLabel.text = "\(MAX_TWEET_SIZE)"
+        // In case it is a reply tweet
+        self.tweetTextView.text = ""
+        self.tweetSizeLabel.text = "\(MAX_TWEET_SIZE)"
+        if !tweetInfo.newTweet {
+            if  (self.tweetInfo.userHandle!.characters.count) <= MAX_TWEET_SIZE  && self.tweetInfo.userHandle!.characters.count > 0 {
+                self.tweetTextView.text = self.userHandleLabel.text
+                self.tweetSizeLabel.text = "\(MAX_TWEET_SIZE - (self.userHandleLabel.text?.characters.count)!)"
+            }
         }
     }
     

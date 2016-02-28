@@ -12,4 +12,5 @@ class ReplyTweetUserInfo: NSObject {
     var userName: String?
     var userHandle: String?
     var userProfileURL: NSURL?
+    var newTweet: Bool = false
 }

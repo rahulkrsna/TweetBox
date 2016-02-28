@@ -9,6 +9,9 @@
 import UIKit
 import AFNetworking
 
+protocol TweetCellDelegate {
+    func tweetCellProfileImageTap(sender: AnyObject?)
+}
 class TweetCell: UITableViewCell {
 
     @IBOutlet var tweetLabel: UILabel!
@@ -24,6 +27,9 @@ class TweetCell: UITableViewCell {
     @IBOutlet var retweetButton: UIButton!
     @IBOutlet var retweetsLabel: UILabel!
     @IBOutlet var favouritesLabel: UILabel!
+    var delegate: TweetCellDelegate?
+    
+    let profileImageTapRec = UITapGestureRecognizer()
     
     var tweet: Tweet! {
         didSet {
@@ -49,6 +55,11 @@ class TweetCell: UITableViewCell {
             
             setFavouritedTo(tweet.favourited)
             setRetweetedTo(tweet.retweeted)
+            
+            // Tap on Image Gesture
+            profileImageTapRec.addTarget(self, action: "tappGeastureAction:")
+            thumbImgView.addGestureRecognizer(profileImageTapRec)
+            thumbImgView.userInteractionEnabled = true
         }
     }
     
@@ -125,6 +136,10 @@ class TweetCell: UITableViewCell {
                 }
             }
         }
+    }
+    
+    func tappGeastureAction(sender: AnyObject) {
+        delegate?.tweetCellProfileImageTap(sender)
     }
     
     func setFavouritedTo(status:Bool) {

@@ -46,7 +46,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-280" y="299"/>
+            <point key="canvasLocation" x="-409" y="187"/>
         </scene>
         <!--Tweets View Controller-->
         <scene sceneID="B8V-6w-Km8">
@@ -233,7 +233,7 @@
                                     <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
-                                    <segue destination="8O4-oW-dfD" kind="push" id="hKt-PE-qo3"/>
+                                    <segue destination="8O4-oW-dfD" kind="push" identifier="UserProfileSegue" id="hKt-PE-qo3"/>
                                 </connections>
                             </button>
                             <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -246,7 +246,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="LMY-tq-TAy" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="394" y="299"/>
+            <point key="canvasLocation" x="351" y="176"/>
         </scene>
         <!--Me-->
         <scene sceneID="c7K-df-9rZ">
@@ -539,11 +539,11 @@
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" red="0.2298717418" green="0.60640395729999996" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <state key="normal" image="tweet-24"/>
+                                <connections>
+                                    <segue destination="BSe-Ez-gd0" kind="push" identifier="NewTweetSegue" id="UhL-Fu-JFf"/>
+                                </connections>
                             </button>
                             <color key="tintColor" red="0.2298717418" green="0.60640395729999996" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                            <connections>
-                                <segue destination="BSe-Ez-gd0" kind="push" identifier="NewTweetSegue" id="JZb-K4-tvI"/>
-                            </connections>
                         </barButtonItem>
                     </navigationItem>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
@@ -551,7 +551,7 @@
                         <outlet property="followersCountLabel" destination="SLX-SG-bw6" id="SkB-fP-kc2"/>
                         <outlet property="followingCountLabel" destination="pZk-a2-JUd" id="sph-nc-OIZ"/>
                         <outlet property="tableView" destination="nyM-7P-vhV" id="11k-hQ-TTp"/>
-                        <outlet property="titleItem" destination="Sz0-fl-eZh" id="0dw-3E-1Ai"/>
+                        <outlet property="tweetsCountLabel" destination="C36-sR-LYf" id="o2v-0E-QLG"/>
                         <outlet property="userHandleLabel" destination="yeg-5U-rma" id="mwY-ZB-6Z0"/>
                         <outlet property="userImageView" destination="X47-NK-Xiy" id="JGv-mT-8dS"/>
                         <outlet property="userNameLabel" destination="0u4-3c-G2T" id="MDn-yX-vmJ"/>
@@ -559,7 +559,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="VrS-Rb-PMD" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="832" y="274"/>
+            <point key="canvasLocation" x="796" y="255"/>
         </scene>
         <!--Reply To Tweet View Controller-->
         <scene sceneID="FxA-7s-tIn">
@@ -600,8 +600,23 @@
                                 <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Akr-C6-MNt">
+                                <rect key="frame" x="239" y="530" width="76" height="30"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="30" id="FCl-xi-mKW"/>
+                                    <constraint firstAttribute="width" constant="76" id="tK0-jX-zDe"/>
+                                </constraints>
+                                <state key="normal" title="New Tweet"/>
+                                <connections>
+                                    <segue destination="lyS-E7-BgB" kind="push" identifier="tweetToTweetsViewSegue" id="azf-o2-C2F"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstAttribute="trailing" secondItem="Akr-C6-MNt" secondAttribute="trailing" constant="5" id="4z4-t8-rJS"/>
+                            <constraint firstItem="U3f-Cv-ATS" firstAttribute="top" secondItem="Akr-C6-MNt" secondAttribute="bottom" constant="8" id="JeK-At-36m"/>
+                        </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="bia-SN-46g">
                         <barButtonItem key="rightBarButtonItem" style="plain" id="Lug-jA-CfM">
@@ -621,6 +636,7 @@
                     <connections>
                         <outlet property="tweetSizeLabel" destination="M08-Zn-3IW" id="asc-2p-hT3"/>
                         <outlet property="tweetTextView" destination="qnY-JY-oRr" id="UNM-20-OtO"/>
+                        <outlet property="tweetsViewBtn" destination="Akr-C6-MNt" id="uma-CH-VpO"/>
                         <outlet property="userHandleLabel" destination="4MP-gA-UhK" id="oVu-CV-arO"/>
                         <outlet property="userImageView" destination="Wv1-AR-G89" id="gYc-hw-0BW"/>
                         <outlet property="userNameLabel" destination="TJV-r1-Wzk" id="EsE-PG-HN7"/>
@@ -628,7 +644,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="UoC-TA-WfB" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="331" y="990"/>
+            <point key="canvasLocation" x="229" y="1144"/>
         </scene>
         <!--Tweet Details View Controller-->
         <scene sceneID="xTS-GC-UW9">
@@ -713,7 +729,7 @@
                                 </constraints>
                                 <state key="normal" image="reply-24"/>
                                 <connections>
-                                    <segue destination="BSe-Ez-gd0" kind="push" id="VAP-GZ-irp"/>
+                                    <segue destination="BSe-Ez-gd0" kind="push" identifier="" id="VAP-GZ-irp"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="k8b-Wg-6Vs">
@@ -806,7 +822,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="2lA-NE-6w9" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="703" y="990"/>
+            <point key="canvasLocation" x="685" y="1135"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="C4r-yA-WfU">
@@ -826,7 +842,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="kNT-WS-Rmy" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="89" y="299"/>
+            <point key="canvasLocation" x="-83" y="187"/>
         </scene>
     </scenes>
     <resources>
@@ -840,6 +856,7 @@
         <image name="user-24" width="24" height="24"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="JZb-K4-tvI"/>
+        <segue reference="Qji-V3-lTI"/>
+        <segue reference="vJY-td-gsR"/>
     </inferredMetricsTieBreakers>
 </document>
